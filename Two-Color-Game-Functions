@@ -1,0 +1,123 @@
+//Name: Oscar Cabrera
+//Date: 01/31/2023
+
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+const int rounds = 5;
+
+void welcome();
+int color_rounds();
+char get_again();
+void results(int);
+void overall(int, int);
+
+int main() {
+    
+    //Random Formula
+    srand(time(0));
+
+    //Welcome Banner
+    welcome();
+
+    char again;
+    int wins;
+    int overall_wins = 0, overall_rounds = 0;
+
+    do {
+
+        wins = color_rounds(); //Getting the wins in each round
+        again = get_again(); //Getting the play again to repeat more than once
+        overall_wins = overall_wins + wins; //Getting overall wins
+        overall_rounds = overall_rounds + rounds; //Getting overall rounds
+        results(wins); //Wins results
+        overall(overall_wins, overall_rounds); //Overall wins and rounds
+
+    } while (again == 'Y' or again == 'y');
+
+    return 0;
+
+}
+
+//Welcome function
+void welcome() {
+
+    cout << "\n***Color Guessing Game***\n";
+    cout << "Guess a color and the computer will tell you if you're right!\n";
+    cout << "We will be playing 5 rounds.\n\n";
+}
+
+//Color rounds function
+int color_rounds() {
+
+    //Declarations
+    int wins = 0, overall_rounds = 0, userChoice, compChoice;
+
+    //for loop for the 5 rounds, and wins
+    for (int i = 0; i < rounds; overall_rounds++, i++) {
+        compChoice = rand() % 2 + 1; //Random Formula
+        cout << "\nRound #" << i + 1 << " [1] Black or [2] Red: ";
+        cin >> userChoice;
+
+        while (cin.fail() || userChoice < 1 || userChoice > 2) {
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore();
+            }
+            cout << "\nError: 1-2 only: ";
+            cin >> userChoice;
+        }
+
+        //comparing the user choices to the computer choices
+        if (userChoice == compChoice) {
+            cout << "\tCorrect Color!\n\n";
+            wins++; //Increments wins by one
+        } else {
+            if (userChoice == 1)
+                cout << "\tBlack is WRONG; the computer picked: Red.\n\n";
+            else
+                cout << " \tRed is WRONG; the computer picked: Black.\n\n";
+        }
+
+    }
+    return wins;
+
+}
+
+//Get play again function
+char get_again() {
+
+    char again;
+    cout << "\nPlay again? Y/N --> ";
+    cin >> again;
+
+    //Input validation on Y/y/N/n
+    //If input does not equals Y/y/N/n, it will output "Error" 
+    while (again != 'Y' and again != 'y' and again != 'N' and again != 'n') {
+        cout << "\nError: Y/N only --> ";
+        cin >> again;
+    }
+    return again;
+
+}
+
+//Results function
+void results(int wins) {
+
+    cout << "\nGame Results: " << endl;
+    cout << "\tRounds: " << rounds << endl;
+    double percent = (double) wins / rounds * 100;
+    cout << fixed << setprecision(1) << "\tWins: " << wins << "(" << percent << "%)" << endl;
+
+}
+
+//Overall Results
+void overall(int overall_wins, int overall_rounds) {
+
+    cout << "\n\nOverall Results: " << endl;
+    cout << "\tTotal Rounds: " << overall_rounds << endl;
+    double percent = (double) overall_wins / overall_rounds * 100;
+    cout << fixed << setprecision(1) << "\tTotal Wins: " << overall_wins << "(" << percent << "%)\n" << endl;
+
+}
